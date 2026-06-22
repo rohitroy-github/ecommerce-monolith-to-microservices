@@ -1,0 +1,301 @@
+# ==========================
+# Build & Compilation
+# ==========================
+target/
+build/
+out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# ==========================
+# Maven
+# ==========================
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+*.pom
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# ==========================
+# Gradle
+# ==========================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.properties
+
+# ==========================
+# IDE - IntelliJ IDEA
+# ==========================
+.idea/
+.idea_modules/
+*.iml
+*.iws
+*.ipr
+*.iml.bak
+*.iws.bak
+*.ipr.bak
+out/
+
+# ==========================
+# IDE - VS Code
+# ==========================
+.vscode/
+*.code-workspace
+.history/
+
+# ==========================
+# IDE - Eclipse / STS
+# ==========================
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.sts4-cache/
+bin/
+tmp/
+*.tmp
+
+# ==========================
+# IDE - NetBeans
+# ==========================
+/nbproject/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+nb-configuration.xml
+
+# ==========================
+# IDE - Sublime Text
+# ==========================
+*.sublime-project
+*.sublime-workspace
+
+# ==========================
+# IDE - Vim / Neovim
+# ==========================
+*.swp
+*.swo
+*~
+.vim/
+.netrwhist
+
+# ==========================
+# IDE - Emacs
+# ==========================
+*~
+\#*\#
+.\#*
+
+# ==========================
+# Java / Spring Boot Specific
+# ==========================
+HELP.md
+*.log
+logs/
+spring.log
+.h2.server.properties
+*.pid
+
+# ==========================
+# Spring Boot Actuator & Metrics
+# ==========================
+metrics/
+actuator-logs/
+
+# ==========================
+# Lombok & Annotation Processing
+# ==========================
+.apt_generated_sources/
+generated-sources/
+generated-test-sources/
+generated/
+
+# ==========================
+# Environment & Configuration
+# ==========================
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+application-local.yml
+application-local.yaml
+application-local.properties
+application-secret.yml
+application-secret.yaml
+application-secret.properties
+application-prod.yml
+application-prod.yaml
+application-prod.properties
+config/local/
+secrets/
+
+# ==========================
+# Database & Data Files
+# ==========================
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+*.log
+data/
+db/
+*.backup
+*.sql.bak
+
+# ==========================
+# Test & Coverage Reports
+# ==========================
+surefire-reports/
+failsafe-reports/
+jacoco.exec
+coverage/
+*.lcov
+.nyc_output/
+htmlcov/
+junit-reports/
+test-results/
+
+# ==========================
+# Package Managers
+# ==========================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ==========================
+# Docker
+# ==========================
+docker-data/
+docker-compose.local.yml
+docker-compose.local.yaml
+Dockerfile.local
+.docker/
+
+# ==========================
+# Kubernetes / Deployment
+# ==========================
+k8s/local/
+helm-values-local.yaml
+
+# ==========================
+# OS & System Files
+# ==========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.AppleDouble
+.LSOverride
+
+# ==========================
+# Temporary & Backup Files
+# ==========================
+*.tmp
+*.temp
+*.bak
+*.back
+*.backup
+*.swp
+*.swo
+*~
+.~*
+*.orig
+
+# ==========================
+# IDE Generated Files
+# ==========================
+.metadata/
+RemoteSystemsTempFiles/
+.recommenders/
+.jsdtscope
+.webassets-unpacked
+
+# ==========================
+# Build Tool Caches
+# ==========================
+.gradle/
+.m2/
+.cache/
+.sonar/
+
+# ==========================
+# Git
+# ==========================
+.git/
+.gitattributes.local
+.gitignore.local
+.gitmodules.local
+
+# ==========================
+# CI/CD
+# ==========================
+.github/workflows/local/
+.gitlab-ci.local.yml
+.circleci/local/
+
+# ==========================
+# Documentation Generated Files
+# ==========================
+site/
+docs/_build/
+javadoc/
+pdocs/
+
+# ==========================
+# Misc Project Files
+# ==========================
+updates/
+*.md.bak
+*.tmp.md
+.idea_backup/
+.vscode_backup/
+
+# ==========================
+# Local Development Files
+# ==========================
+.local/
+local/
+dev-notes.md
+dev-config.local.json
+.private/
+
+# ===========================
+# DO NOT IGNORE (WhiteList)
+# ===========================
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.jar
+!.github/
+!.gitignore
+!.editorconfig
+!mvnw
+!mvnw.cmd
