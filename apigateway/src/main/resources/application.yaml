@@ -52,6 +52,11 @@ services:
 server:
   port: 8080
 
+# JWT Configuration
+jwt:
+  secret: mySuperSecretKeyForEcomV1Application123456789
+  expiration: 86400000  # 24 hours (in milliseconds)
+  
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
