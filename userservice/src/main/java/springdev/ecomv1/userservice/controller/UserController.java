@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import springdev.ecomv1.userservice.dto.LoginRequest;
+import springdev.ecomv1.userservice.dto.LoginResponse;
 import springdev.ecomv1.userservice.dto.RegisterUserRequest;
 import springdev.ecomv1.userservice.dto.UserResponse;
 import springdev.ecomv1.userservice.service.UserService;
@@ -40,5 +42,11 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = userService.login(request);
+        return ResponseEntity.ok(response);
     }
 }
