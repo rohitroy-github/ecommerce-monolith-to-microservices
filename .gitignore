@@ -271,7 +271,7 @@ pdocs/
 # ==========================
 # Misc Project Files
 # ==========================
-updates/
+dev-project-files/
 *.md.bak
 *.tmp.md
 .idea_backup/

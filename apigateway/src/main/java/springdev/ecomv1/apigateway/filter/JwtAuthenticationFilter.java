@@ -14,6 +14,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import springdev.ecomv1.apigateway.config.RoutePermissionConfig;
 import springdev.ecomv1.apigateway.service.JwtService;
 
 @Component
@@ -27,9 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String PRODUCTS_PATH = "/api/products";
 
     private final JwtService jwtService;
+    private final RoutePermissionConfig routePermissionConfig;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, RoutePermissionConfig routePermissionConfig) {
         this.jwtService = jwtService;
+        this.routePermissionConfig = routePermissionConfig;
     }
 
     @Override
@@ -66,7 +69,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Workflow Step 8: Token is valid, proceed to downstream routing.
+        // Workflow Step 8: Extract role from token for permission checking.
+        String role = jwtService.extractRole(token);
+        String method = request.getMethod();
+
+        // Workflow Step 9: Validate role-based access to this route, else return 403.
+        if (!routePermissionConfig.hasPermission(role, method, path)) {
+            writeForbidden(response, request, "User role '" + role + "' does not have permission for " + method + " " + path);
+            return;
+        }
+
+        // Workflow Step 10: Role permission granted, route request downstream.
         filterChain.doFilter(request, response);
     }
 
@@ -88,6 +101,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String body = String.format(
                 "{\"timestamp\":\"%s\",\"status\":401,\"error\":\"Unauthorized\",\"message\":\"%s\",\"path\":\"%s\"}",
+                Instant.now(),
+                escapeJson(message),
+                escapeJson(request.getRequestURI()));
+
+        response.getWriter().write(body);
+    }
+
+    private void writeForbidden(HttpServletResponse response, HttpServletRequest request, String message)
+            throws IOException {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String body = String.format(
+                "{\"timestamp\":\"%s\",\"status\":403,\"error\":\"Forbidden\",\"message\":\"%s\",\"path\":\"%s\"}",
                 Instant.now(),
                 escapeJson(message),
                 escapeJson(request.getRequestURI()));
