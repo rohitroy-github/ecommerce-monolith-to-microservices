@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Carries customer and product details required to create a new order. */
 @Getter
 @Setter
 @NoArgsConstructor

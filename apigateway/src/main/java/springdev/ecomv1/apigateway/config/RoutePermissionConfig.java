@@ -3,7 +3,9 @@ package springdev.ecomv1.apigateway.config;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Component;
+
 import springdev.ecomv1.apigateway.enums.RoleType;
 
 /**
@@ -28,17 +30,19 @@ public class RoutePermissionConfig {
                 "GET:/api/products",
                 "GET:/api/products/**",
                 "POST:/api/orders",
-                "GET:/api/orders/**"
-        ));
+                "GET:/api/orders/**"));
 
         // Seller: Manage product catalog
         permissions.put(RoleType.SELLER, List.of(
                 "GET:/api/products",
                 "GET:/api/products/**",
+                "GET:/api/products/sellers/**",
+                "GET:/api/orders/sellers/**",
                 "POST:/api/products",
                 "PUT:/api/products/**",
-                "DELETE:/api/products/**"
-        ));
+                "DELETE:/api/products/**",
+                "GET:/api/orders/dashboard/**",
+                "POST:/api/orders/dashboard/**"));
 
         // Admin: Full access
         permissions.put(RoleType.ADMIN, List.of("/**"));
@@ -52,8 +56,8 @@ public class RoutePermissionConfig {
      * Check if a role has permission for a route.
      * 
      * @param roleStr User role as string (CUSTOMER, SELLER, ADMIN)
-     * @param method HTTP method (GET, POST, PUT, DELETE)
-     * @param path Request path
+     * @param method  HTTP method (GET, POST, PUT, DELETE)
+     * @param path    Request path
      * @return true if allowed, false otherwise
      */
     public boolean hasPermission(String roleStr, String method, String path) {
@@ -62,7 +66,12 @@ public class RoutePermissionConfig {
         if (role == null) {
             return false;
         }
-        
+
+        // Seller-order routes are restricted to SELLER and ADMIN roles.
+        if (path.startsWith("/api/orders/sellers/")) {
+            return role == RoleType.SELLER || role == RoleType.ADMIN;
+        }
+
         List<String> rolePermissions = permissions.get(role);
         if (rolePermissions == null) {
             return false;
@@ -75,13 +84,14 @@ public class RoutePermissionConfig {
             if (permission.equals("/**")) {
                 return true;
             }
-            
+
             // Exact match
             if (permission.equals(routePattern)) {
                 return true;
             }
-            
-            // Wildcard path matching (e.g., "GET:/api/orders/**" matches "GET:/api/orders/1")
+
+            // Wildcard path matching (e.g., "GET:/api/orders/**" matches
+            // "GET:/api/orders/1")
             if (permission.endsWith("/**")) {
                 String basePath = permission.substring(0, permission.length() - 2);
                 if (routePattern.startsWith(basePath)) {

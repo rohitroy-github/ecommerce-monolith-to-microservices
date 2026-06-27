@@ -185,6 +185,14 @@ package-lock.json
 yarn.lock
 
 # ==========================
+# Vite
+# ==========================
+dist/
+.vite/
+vite.svg
+*.tsbuildinfo
+
+# ==========================
 # Docker
 # ==========================
 docker-data/

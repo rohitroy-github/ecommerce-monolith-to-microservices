@@ -88,6 +88,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return true;
         }
 
+        // Product catalog reads are public, but seller-specific views stay protected.
+        if (path.startsWith(PRODUCTS_PATH + "/sellers/")) {
+            return false;
+        }
+
         // Product catalog reads are public; write operations still require JWT.
         return HttpMethod.GET.matches(request.getMethod())
                 && (PRODUCTS_PATH.equals(path) || path.startsWith(PRODUCTS_PATH + "/"));

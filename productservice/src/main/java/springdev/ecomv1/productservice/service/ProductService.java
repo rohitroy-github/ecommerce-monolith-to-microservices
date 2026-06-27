@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import springdev.ecomv1.productservice.dto.CreateProductRequest;
 import springdev.ecomv1.productservice.dto.ProductAvailabilityResponse;
 import springdev.ecomv1.productservice.dto.ProductResponse;
+import springdev.ecomv1.productservice.dto.ProductSummaryResponse;
 import springdev.ecomv1.productservice.entity.Inventory;
 import springdev.ecomv1.productservice.entity.Product;
 import springdev.ecomv1.productservice.exception.ConflictException;
@@ -24,6 +25,9 @@ public class ProductService {
         private final ProductRepository productRepository;
         private final InventoryRepository inventoryRepository;
 
+        /**
+         * Creates a product and initializes its inventory in a single transaction.
+         */
         @Transactional
         public ProductResponse createProduct(CreateProductRequest request) {
                 LocalDateTime now = LocalDateTime.now();
@@ -58,6 +62,9 @@ public class ProductService {
                                 .build();
         }
 
+        /**
+         * Returns full details for all products.
+         */
         @Transactional(readOnly = true)
         public List<ProductResponse> getAllProducts() {
                 return productRepository.findAll().stream()
@@ -73,6 +80,22 @@ public class ProductService {
                                 .toList();
         }
 
+        /**
+         * Returns lightweight product summaries for a seller.
+         */
+        @Transactional(readOnly = true)
+        public List<ProductSummaryResponse> getProductsBySellerId(Long sellerId) {
+                return productRepository.findBySellerId(sellerId).stream()
+                                .map(product -> ProductSummaryResponse.builder()
+                                                .id(product.getId())
+                                                .name(product.getName())
+                                                .build())
+                                .toList();
+        }
+
+        /**
+         * Fetches a product by id or throws if it does not exist.
+         */
         @Transactional(readOnly = true)
         public ProductResponse getProductById(Long id) {
                 Product product = productRepository.findById(id)
@@ -89,6 +112,9 @@ public class ProductService {
                                 .build();
         }
 
+        /**
+         * Returns current stock state for a product.
+         */
         @Transactional(readOnly = true)
         public ProductAvailabilityResponse getProductAvailability(Long id) {
                 productRepository.findById(id)
@@ -106,6 +132,9 @@ public class ProductService {
                                 .build();
         }
 
+        /**
+         * Atomically decreases product stock and returns updated availability.
+         */
         @Transactional
         public ProductAvailabilityResponse reduceStock(Long id, Integer quantityToReduce) {
                 productRepository.findById(id)

@@ -1,5 +1,7 @@
 package springdev.ecomv1.orderservice.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import springdev.ecomv1.orderservice.dto.CreateOrderRequest;
 import springdev.ecomv1.orderservice.dto.OrderResponse;
 import springdev.ecomv1.orderservice.dto.OrderStatusResponse;
+import springdev.ecomv1.orderservice.dto.SellerOrderResponse;
 import springdev.ecomv1.orderservice.dto.UpdateOrderStatusRequest;
 import springdev.ecomv1.orderservice.service.OrderService;
 
@@ -35,6 +38,13 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderStatusResponse> getOrderById(@PathVariable Long id) {
         OrderStatusResponse response = orderService.getOrderById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    // Seller-scoped endpoint to fetch orders linked to a specific seller id.
+    @GetMapping("/sellers/{sellerId}")
+    public ResponseEntity<List<SellerOrderResponse>> getOrdersBySellerId(@PathVariable Long sellerId) {
+        List<SellerOrderResponse> response = orderService.getOrdersBySellerId(sellerId);
         return ResponseEntity.ok(response);
     }
 

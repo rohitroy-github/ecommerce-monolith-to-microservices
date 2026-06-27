@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import springdev.ecomv1.orderservice.enums.OrderStatus;
 
+/** Carries the new order status when updating an existing order lifecycle state. */
 @Getter
 @Setter
 @NoArgsConstructor

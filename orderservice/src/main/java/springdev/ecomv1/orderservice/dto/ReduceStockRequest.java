@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Defines the quantity to deduct from inventory after order confirmation. */
 @Getter
 @Setter
 @NoArgsConstructor

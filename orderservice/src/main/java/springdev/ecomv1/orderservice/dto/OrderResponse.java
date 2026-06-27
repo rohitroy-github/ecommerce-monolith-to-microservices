@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents the standard response payload returned after order operations. */
 @Getter
 @Setter
 @NoArgsConstructor

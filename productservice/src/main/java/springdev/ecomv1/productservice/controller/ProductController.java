@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import springdev.ecomv1.productservice.dto.CreateProductRequest;
 import springdev.ecomv1.productservice.dto.ProductAvailabilityResponse;
 import springdev.ecomv1.productservice.dto.ProductResponse;
+import springdev.ecomv1.productservice.dto.ProductSummaryResponse;
 import springdev.ecomv1.productservice.dto.ReduceStockRequest;
 import springdev.ecomv1.productservice.service.ProductService;
 
@@ -46,6 +47,13 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
         ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(product);
+    }
+
+    // Returns products for a seller with a compact payload (id and name only).
+    @GetMapping("/sellers/{sellerId}")
+    public ResponseEntity<List<ProductSummaryResponse>> getProductsBySellerId(@PathVariable Long sellerId) {
+        List<ProductSummaryResponse> products = productService.getProductsBySellerId(sellerId);
+        return ResponseEntity.ok(products);
     }
 
     // Returns availability details for the given product id.

@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: api-gateway
   cloud:
@@ -54,7 +56,7 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: mySuperSecretKeyForEcomV1Application123456789
+  secret: ${JWT_SECRET}
   expiration: 86400000  # 24 hours (in milliseconds)
   
 logging:

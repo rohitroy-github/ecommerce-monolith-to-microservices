@@ -31,6 +31,8 @@ public class OrderItem {
 
     private Long productId;
 
+    private Long sellerId;
+
     private Integer quantity;
 
     private BigDecimal price;

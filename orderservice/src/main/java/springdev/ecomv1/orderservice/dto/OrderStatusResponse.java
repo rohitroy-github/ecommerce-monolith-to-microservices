@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Exposes only the current status of an order for lightweight status checks. */
 @Getter
 @Setter
 @NoArgsConstructor
