@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import springdev.ecomv1.apigateway.enums.RoleType;
@@ -21,6 +23,8 @@ import springdev.ecomv1.apigateway.enums.RoleType;
  */
 @Component
 public class RoutePermissionConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(RoutePermissionConfig.class);
 
     private final Map<RoleType, List<String>> permissions = new HashMap<>();
 
@@ -62,18 +66,24 @@ public class RoutePermissionConfig {
      */
     public boolean hasPermission(String roleStr, String method, String path) {
         // Convert string role to RoleType enum
+        logger.info("Visiting route - Method: {}, Path: {}, Role: {}", method, path, roleStr);
+        
         RoleType role = RoleType.fromString(roleStr);
         if (role == null) {
+            logger.warn("Invalid role provided: {}", roleStr);
             return false;
         }
 
         // Seller-order routes are restricted to SELLER and ADMIN roles.
         if (path.startsWith("/api/orders/sellers/")) {
-            return role == RoleType.SELLER || role == RoleType.ADMIN;
+            boolean hasAccess = role == RoleType.SELLER || role == RoleType.ADMIN;
+            logger.info("Seller-order route access for role {}: {}", role, hasAccess);
+            return hasAccess;
         }
 
         List<String> rolePermissions = permissions.get(role);
         if (rolePermissions == null) {
+            logger.warn("No permissions found for role: {}", role);
             return false;
         }
 
@@ -82,11 +92,13 @@ public class RoutePermissionConfig {
         for (String permission : rolePermissions) {
             // Full wildcard access
             if (permission.equals("/**")) {
+                logger.debug("Full wildcard access granted for role: {}", role);
                 return true;
             }
 
             // Exact match
             if (permission.equals(routePattern)) {
+                logger.info("Route access ALLOWED - Role: {}, Route: {}", role, routePattern);
                 return true;
             }
 
@@ -95,11 +107,13 @@ public class RoutePermissionConfig {
             if (permission.endsWith("/**")) {
                 String basePath = permission.substring(0, permission.length() - 2);
                 if (routePattern.startsWith(basePath)) {
+                    logger.info("Route access ALLOWED - Role: {}, Route: {}", role, routePattern);
                     return true;
                 }
             }
         }
 
+        logger.warn("Route access DENIED - Role: {}, Route: {}", role, routePattern);
         return false;
     }
 }

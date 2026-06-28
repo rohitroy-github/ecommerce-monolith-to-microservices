@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import springdev.ecomv1.apigateway.service.JwtService;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     // Workflow Step 1: Allow onboarding routes to pass without JWT.
     private static final List<String> PUBLIC_ENDPOINTS = List.of(
@@ -44,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Workflow Step 2: Resolve request path.
         String path = request.getRequestURI();
+        
+        // Log all incoming requests with method and path
+        logger.info("Incoming request - Method: {}, Path: {}", request.getMethod(), path);
 
         // Workflow Step 3: If request is public, skip JWT checks and continue.
         if (isPublicRoute(request, path)) {

@@ -63,6 +63,7 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.web: DEBUG
+    springdev.ecomv1.apigateway: INFO
 
 management:
   endpoints:
