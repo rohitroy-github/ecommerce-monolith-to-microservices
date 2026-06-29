@@ -1,0 +1,72 @@
+E-Commerce Service Brief, Ports, and Routes
+
+Authorization Legend:
+- Public: No JWT required.
+- Customer: JWT required with CUSTOMER role.
+- Seller: JWT required with SELLER role.
+- Admin: JWT required with ADMIN role.
+- Seller/Admin: JWT required with SELLER or ADMIN role.
+
+1) API Gateway
+- Port: 8080
+- Purpose: Single entry point that routes external/frontend traffic to backend services.
+- Gateway route mappings:
+	- /api/products/** -> Product Service (http://localhost:8081) | Auth: Mixed (Public for most GET product reads, protected otherwise)
+	- /api/orders/** -> Order Service (http://localhost:8082) | Auth: Protected (role-based)
+	- /api/payments/** -> Payment Service (http://localhost:8083) | Auth: Protected (Admin in current config)
+	- /api/users/** -> User Service (http://localhost:8084) | Auth: Mixed (Public for register/login, protected otherwise)
+
+2) Product Service
+- Port: 8081
+- Purpose: Product catalog management and stock availability/updates.
+- Base path: /api/products
+- Routes:
+	- POST /api/products: Create a new product. | Auth: Seller/Admin
+	- GET /api/products: Fetch all products. | Auth: Public
+	- GET /api/products/{id}: Fetch one product by id. | Auth: Public
+	- GET /api/products/sellers/{sellerId}: Fetch product summary list for a seller. | Auth: Seller/Admin
+	- GET /api/products/{id}/availability: Check current availability for a product. | Auth: Public
+	- PUT /api/products/{id}/stock: Reduce stock for a product. | Auth: Seller/Admin
+
+3) Order Service
+- Port: 8082
+- Purpose: Order lifecycle (create/read/update) and dashboard metrics for admin/sellers.
+- Base path: /api/orders
+- Core order routes:
+	- POST /api/orders: Create a new order. | Auth: Customer/Admin
+	- GET /api/orders/{id}: Fetch order status/details by order id. | Auth: Customer/Admin
+	- GET /api/orders/sellers/{sellerId}: Fetch orders associated with a seller. | Auth: Seller/Admin
+	- PATCH /api/orders/{id}/status: Update order status. | Auth: Admin
+- Dashboard routes:
+	- GET /api/orders/dashboard/admin/overview: Admin-level order and revenue overview. | Auth: Seller/Admin
+	- GET /api/orders/dashboard/sellers/{sellerId}/metrics: Seller-specific performance metrics. | Auth: Seller/Admin
+
+4) Payment Service
+- Port: 8083
+- Purpose: Payment processing and payment lookup for orders.
+- Base path: /api/payments
+- Routes:
+	- POST /api/payments: Process a payment for an order. | Auth: Admin
+	- GET /api/payments/order/{orderId}: Retrieve payment details by order id. | Auth: Admin
+
+5) User Service
+- Port: 8084
+- Purpose: User identity, registration, and authentication.
+- Base path: /api/users
+- Routes:
+	- POST /api/users/register: Register a new user. | Auth: Public
+	- GET /api/users/{id}: Fetch a user by id. | Auth: Admin
+	- GET /api/users: Fetch all users. | Auth: Admin
+	- POST /api/users/login: Authenticate user and return login/JWT response. | Auth: Public
+
+6) DataSeeder (CLI Runner)
+- Port: No HTTP port (spring.main.web-application-type=none).
+- Purpose: Seeds baseline users/products/orders and verifies payment linkage.
+- Runtime call target:
+	- Calls backend APIs through API Gateway at http://localhost:8080.
+
+7) Frontend Client (Vite + React)
+- Port: 5173 (default Vite dev-server port; no custom port configured in vite.config.js).
+- Purpose: UI for customer, seller, and admin workflows.
+- Backend integration path:
+	- Calls backend via API Gateway endpoints under /api/*.
