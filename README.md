@@ -1,6 +1,6 @@
-# E-Commerce Microservices (ecomv1)
+# Ecommerce Management Platform
 
-A Spring Boot microservices e-commerce backend with a React (Vite) frontend.
+A scalable, enterprise-grade e-commerce management solution built with **Spring Boot microservices architecture**. Featuring independently deployable services for products, orders, payments, and users, combined with a modern React + Vite frontend for a seamless shopping experience.
 
 ## Tech Stack
 
@@ -107,6 +107,7 @@ All API calls go through gateway (`http://localhost:8080`):
 
 ## Useful Files
 
+- **`PROJECT_OVERVIEW.md`**: Complete project guide including architecture, features, Spring modules, database structure, JWT auth, API endpoints, startup instructions, and troubleshooting
 - `dev-project-files/service_information.txt`: Service brief, routes, and authorization levels
 - `dev-project-files/sql-reset-script.sql`: DB reset + table listing queries
 - `dev-project-files/db-test-data-starter-script.sql`: Test data helper SQL
